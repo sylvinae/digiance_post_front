@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   Container,
   Table,
-  Spinner,
   Pagination,
   ToastContainer,
   Toast,
+  Spinner,
 } from "react-bootstrap";
 import TopBar from "../Components/TopBar";
 import SearchBar from "../Components/SearchBar";
@@ -28,6 +28,7 @@ interface ResponseData {
   totalPages: number;
   items: Post[];
 }
+
 interface Post {
   id: string;
   userId: string;
@@ -42,9 +43,9 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchTitlesOnly, setSearchTitlesOnly] = useState<boolean>(false);
+  const [searchTitles, setsearchTitles] = useState<boolean>(false);
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const debouncedSearchTitles = useDebounce(searchTitlesOnly, 500);
+  const debouncedSearchTitles = useDebounce(searchTitles, 500);
   const [notifications, setNotifications] = useState<
     { id: number; message: string }[]
   >([]);
@@ -72,6 +73,7 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
       eventSource.close();
     };
   }, []);
+
   const fetchPosts = async (page: number = currentPage) => {
     try {
       setLoading(true);
@@ -86,22 +88,26 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
           },
         }
       );
+      console.log("currentPage:", currentPage);
+      console.log("totalPages:", totalPages);
+      console.log("loading:", loading);
+
       setPosts(response.data.items);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       setError("Failed to fetch posts.");
+      console.error("Error details:", error);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPosts(currentPage);
   }, [currentPage, debouncedSearchQuery, debouncedSearchTitles]);
 
   useEffect(() => {
-    if (debouncedSearchQuery || debouncedSearchTitles) {
-      setCurrentPage(1);
-    }
+    setCurrentPage(1);
   }, [debouncedSearchQuery, debouncedSearchTitles]);
 
   const handlePrevious = () => {
@@ -117,7 +123,17 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
   };
 
   if (error) {
-    return <div className="text-center my-5 text-danger py-3">{error}</div>;
+    return (
+      <div className="text-center my-5 text-danger py-3">
+        {error}
+        <button
+          className="btn btn-link"
+          onClick={() => fetchPosts(currentPage)}
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -128,8 +144,8 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
           <SearchBar
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
-            searchTitlesOnly={searchTitlesOnly}
-            onSearchTitlesChange={setSearchTitlesOnly}
+            searchTitles={searchTitles}
+            onSearchTitlesChange={setsearchTitles}
           />
         </Container>
 
@@ -175,16 +191,16 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
           className="position-sticky bottom-0 text-center py-2"
           style={{ backgroundColor: "#f2f4f7" }}
         >
-          {posts.length > 0 && (
+          {(posts.length > 0 || loading) && (
             <Pagination className="mb-0 d-inline-flex">
               <Pagination.Prev
                 onClick={handlePrevious}
-                disabled={currentPage === 1}
+                disabled={currentPage === 1 || loading}
               />
               <Pagination.Item active>{currentPage}</Pagination.Item>
               <Pagination.Next
                 onClick={handleNext}
-                disabled={currentPage === totalPages}
+                disabled={currentPage === totalPages || loading}
               />
             </Pagination>
           )}

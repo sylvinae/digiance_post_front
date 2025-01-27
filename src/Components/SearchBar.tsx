@@ -4,14 +4,14 @@ import { FaSearch } from "react-icons/fa";
 interface SearchBarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  searchTitlesOnly: boolean;
+  searchTitles: boolean;
   onSearchTitlesChange: (value: boolean) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   searchQuery,
   onSearchChange,
-  searchTitlesOnly,
+  searchTitles,
   onSearchTitlesChange,
 }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +19,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleCheckboxChange = () => {
-    onSearchTitlesChange(!searchTitlesOnly);
+    onSearchTitlesChange(!searchTitles);
   };
 
   return (
@@ -43,7 +43,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <Form.Check
         type="checkbox"
         label="Search Titles"
-        checked={searchTitlesOnly}
+        checked={searchTitles}
         onChange={handleCheckboxChange}
         className="mb-0 ms-auto"
         style={{ whiteSpace: "nowrap" }}

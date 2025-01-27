@@ -12,3 +12,4 @@ stats.html
 
 .eslintcache
 .env
+.DS_Store
