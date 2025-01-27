@@ -88,15 +88,11 @@ const Homepage: React.FC<HomepageProps> = ({ user, onLogout }) => {
           },
         }
       );
-      console.log("currentPage:", currentPage);
-      console.log("totalPages:", totalPages);
-      console.log("loading:", loading);
 
       setPosts(response.data.items);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       setError("Failed to fetch posts.");
-      console.error("Error details:", error);
     } finally {
       setLoading(false);
     }

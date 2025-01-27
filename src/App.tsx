@@ -36,7 +36,6 @@ const App: React.FC = () => {
           setUser(response.data.user);
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
       } finally {
         setInitializing(false);
       }
