@@ -1,0 +1,26 @@
+body {
+  background-color: #f2f4f7;
+  max-height: 100vh !important;
+}
+*:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.btn.btn-primary {
+  background-color: #184d47 !important;
+  border-color: #184d47 !important;
+}
+
+.table {
+  margin: 0;
+}
+th {
+  padding: 1rem !important;
+  background-color: #184d47 !important;
+  color: white !important;
+}
+
+td {
+  padding: 1rem !important;
+}

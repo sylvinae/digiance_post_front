@@ -1,0 +1,13 @@
+.active > .page-link {
+  background-color: #00917c !important;
+  border: none;
+}
+.disabled > .page-link {
+  border: none;
+}
+.page-item > .page-link {
+  border: none;
+}
+.table-hover tbody tr:hover td {
+  background: #f3fff9;
+}
